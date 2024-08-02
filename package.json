@@ -1,0 +1,21 @@
+{
+    "name": "aws-file-storage-app",
+    "version": "1.0.0",
+    "description": "A sample Node.js application",
+    "main": "src/crypto.js",
+    "scripts": {
+      "start": "node src/crypto.js"
+    },
+    "author": "Ken",
+    "license": "MIT",
+    "dependencies": {
+      "express": "^4.17.1",
+      "body-parser": "^1.19.0",
+      "argon2": "^0.40.3"
+    },
+    "devDependencies": {
+    },
+    "engines": {
+      "node": ">=14.0.0"
+    }
+  }
