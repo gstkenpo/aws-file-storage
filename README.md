@@ -1,7 +1,7 @@
 # aws-file-storage
 
 how to run:
-npm start
+npm run backup
 
 here is the design functionality needed to implement
 
