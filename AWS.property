@@ -1,0 +1,4 @@
+s3.region=us-east-2
+s3.bucket.name=
+s3.bucket.storeageClass=
+s3.directory=
