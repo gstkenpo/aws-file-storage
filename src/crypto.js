@@ -75,7 +75,7 @@ const decrypt = (encObjectBase64, paintPw) => {
 
 const base64Hash = (paintext) => {
    const sha3Hash = crypto.createHash('sha3-256');
-   return sha3Hash.update(paintext).digest('base64');
+   return sha3Hash.update(paintext).digest('base64url');
 }
 
 const test = () => {

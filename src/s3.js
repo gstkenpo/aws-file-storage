@@ -1,4 +1,4 @@
-const { S3Client, ListObjectsCommand, PutObjectCommand, GetObjectCommand} = require("@aws-sdk/client-s3"); // CommonJS import
+const { S3Client, ListObjectsCommand, PutObjectCommand, GetObjectCommand, HeadObjectCommand} = require("@aws-sdk/client-s3"); // CommonJS import
 const { Upload } = require('@aws-sdk/lib-storage');
 const fs = require('fs')
 const path = require( 'path' );
@@ -40,16 +40,28 @@ const uploadFile = async(bucketName, s3Path, localFilePath, based64EncodedEncryp
     encObject.relativePath = based64EncodedEncryptedPath
     const encObjectBinary = msgpack.encode(encObject);
 
-    const putObjectCommandInput = {
-        Bucket: bucketName, // required
-        StorageClass: awsConfig.get('s3.bucket.storeageClass'),
-        Key: s3Path, // required
-        Body: encObjectBinary
+    const headObjectCommandInput = {
+      Bucket: bucketName, // required
+      Key: s3Path, // required
     }
-
-    const command = new PutObjectCommand(putObjectCommandInput);
-    const response = await client.send(command);
-    console.log(response);
+    const headObjectCommand = new HeadObjectCommand(headObjectCommandInput)
+    try {
+      const headResponse = await client.send(headObjectCommand)
+      console.log(`Object "${s3Path}" already exists in bucket "${bucketName}". Skipping upload.`);
+    } catch (error) {
+      if (error.name === 'NotFound') {
+        const putObjectCommandInput = {
+          Bucket: bucketName, // required
+          StorageClass: awsConfig.get('s3.bucket.storeageClass'),
+          Key: s3Path, // required
+          Body: encObjectBinary
+      }
+  
+      const putObjectCommand = new PutObjectCommand(putObjectCommandInput);
+      const response = await client.send(putObjectCommand);
+      console.log('s3 response etag: ', response.ETag)
+      }
+    }
   };
   
 
